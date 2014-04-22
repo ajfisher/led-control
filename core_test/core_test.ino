@@ -12,59 +12,40 @@ Notes: Code for sina's fans.
 
 #define LEDPIN 6
 
-#define NO_STAVES 10
+#define NO_STAVES 7
 #define NO_PIXELS_PER_STAVE 17
 #define NO_LEDS (NO_STAVES * NO_PIXELS_PER_STAVE)
 
-#define FPS 10
+#define FPS 15
 #define FPS_MS (1000/FPS)
 
-typedef enum PIXEL_STATUS {
-  PIXEL_OFF,
-  PIXEL_ON,
-  PIXEL_FADE_OFF,
-  PIXEL_FADE_ON,
-  TWINKLE
-} ;
+#define UP 1
+#define DOWN -1
 
-typedef enum STAVE_STATUS {
-  STAVE_OFF,
-  STAVE_ON,
-  BUILD,
-  SHOOT,
-  STAVE_FADE_OFF
-} ;
-
-typedef struct {
-  uint32_t colour;
-  PIXEL_STATUS current_status;
-  uint8_t current_frames;
-  PIXEL_STATUS next_status;
-  uint8_t next_frames;
-  
-} fan_pixel;
-
-typedef struct {
-  fan_pixel pixels[NO_PIXELS_PER_STAVE];
-  STAVE_STATUS current_status;
-  STAVE_STATUS next_status;
-  
-} fan_stave;
-
-typedef struct {
-  fan_stave staves[NO_STAVES];
-  int status;
-} fan;
-
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(NO_LEDS, LEDPIN, NEO_GRB + NEO_KHZ800);
+#include "definitions.h"
 
 fan thefan;
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NO_LEDS, LEDPIN, NEO_GRB + NEO_KHZ800);
 
 uint32_t last_time = 0;
 uint32_t next_action_time = 0;
 
+
+// MAIN BITS HERE
+
 void setup() {
   strip.begin();
+
+  strip.show();
+  //stave_build(0, 100, 100, 0, 1, DOWN);
+  //stave_build(0, 0, 100, 0, 1, UP);
+  //stave_build(1, 0, 100, 0, 1, UP);
+  //stave_build(2, 0, 100, 0, 1);
+  //stave_build(3, 0, 100, 0, 1);
+  //stave_build(4, 0, 100, 0, 1);
+  stave_shoot(0, 100, 0, 100, 2, DOWN);
+  //pixel_state(0, 0, 100, 100, 100, PIXEL_OFF, 15, PIXEL_ON, 15);
 }
 
 void loop() {
@@ -73,6 +54,7 @@ void loop() {
     // we need to update the frame.
     update_leds();
     calculate_next_frame();
+    last_time = cur_time;
   }
 
   if (cur_time >= next_action_time) {
@@ -82,21 +64,5 @@ void loop() {
 }
 
 
-void update_leds() {
-// does the update of the LEDs
-  strip.show();
-}
-
-void calculate_next_frame() {
-// calculates the requirments of the next frame 
-  for (uint8_t i = 0; i<NO_LEDS; i++) {
-    
-  }
-  
-}
-
-void get_next_action() {
-  ;
-}
 
 
