@@ -1,4 +1,4 @@
-// Holds all of the type definitions in use
+// Holds all of the different animation components
 
 void pixel_state(uint8_t stave_no, uint8_t pixel, uint8_t r, uint8_t g, uint8_t b, \
                 PIXEL_STATUS current, uint8_t c_frames, PIXEL_STATUS next, uint8_t n_frames) {

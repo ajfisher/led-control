@@ -1,3 +1,6 @@
+// Holds all of the various definitions for structs etc.
+
+
 typedef enum SEQUENCES {
   SEQ_STAVE_OFF,
   SEQ_STAVE_ON,
@@ -51,6 +54,7 @@ typedef struct {
 typedef struct {
   uint16_t time;
   SEQUENCES seq;
+  uint8_t item;
   uint8_t r;
   uint8_t g;
   uint8_t b;

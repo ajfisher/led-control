@@ -23,6 +23,7 @@ Notes: Code for sina's fans.
 #define DOWN -1
 
 #include "definitions.h"
+#include "sequencing.h"
 
 fan thefan;
 
@@ -30,12 +31,26 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(NO_LEDS, LEDPIN, NEO_GRB + NEO_KHZ80
 
 uint32_t last_time = 0;
 uint32_t next_action_time = 0;
+uint16_t no_actions = 0; 
+uint8_t current_action_index = 0;
 
+uint8_t sequence_size = 0;
+
+sequence *current_action;
 
 // MAIN BITS HERE
 
 void setup() {
   strip.begin();
+  Serial.begin(9600);
+  //Serial.print("Number of items is: ");
+
+  // set up all the action stuff.
+  sequence_size = sizeof(sequence);
+  no_actions = sizeof(sequence_table)/sequence_size;
+  next_action_time = sequence_table[current_action_index].time;
+
+  Serial.println(next_action_time);
 
   strip.show();
   //stave_build(0, 100, 100, 0, 1, DOWN);
