@@ -51,11 +51,11 @@ void calculate_next_frame() {
 void get_next_action() {
   // gets the next action that should be undertaken.
   
-  Serial.println(F("\ngetting the next action"));
+/**  Serial.println(F("\ngetting the next action"));
   Serial.print(F("current action: "));
   Serial.println(current_action_index);
  
-  Serial.println(F("reading words: "));
+  Serial.println(F("reading words: "));**/
   
   // set the vals;
   uint32_t seq_time = pgm_read_word(&(sequence_table[current_action_index][0]));
@@ -66,10 +66,6 @@ void get_next_action() {
   uint8_t b = (uint8_t)pgm_read_word(&(sequence_table[current_action_index][5]));
   uint8_t frames = (uint8_t)pgm_read_word(&(sequence_table[current_action_index][6]));
 
-  Serial.print(F(" seq: "));
-  Serial.println(seq);
-
-      //stave_on(item, r, g, b);
   // now we test the types and set the action based upon it.
   switch (seq) {
     case SEQ_STAVE_OFF:
@@ -93,6 +89,23 @@ void get_next_action() {
     case SEQ_STAVE_SHOOT_DOWN:
       stave_shoot(item, r, g, b, frames, DOWN);
       break;
+    case SEQ_FAN_BUILD_UP:
+      fan_build(r, g, b, frames, UP);
+      break;
+    case SEQ_FAN_BUILD_DOWN:
+      fan_build(r, g, b, frames, DOWN);
+      break;
+    case SEQ_FAN_SHOOT_UP:
+      fan_shoot(r, g, b, frames, UP);
+      break;
+    case SEQ_FAN_SHOOT_DOWN:
+      fan_shoot(r, g, b, frames, DOWN);
+      break;
+    case SEQ_FAN_OFF:
+      fan_off();
+      break;
+    case SEQ_FAN_ON:
+      fan_on(r, g, b);
   }
 
 
@@ -105,7 +118,7 @@ void get_next_action() {
     next_action_time = pgm_read_word(&(sequence_table[current_action_index][0]));
   }
   
-  Serial.print(F("Vals: "));
+/**  Serial.print(F("Vals: "));
   Serial.print(F("ST: "));
   Serial.print(seq_time);
   Serial.print(F(" seq: "));
@@ -122,6 +135,6 @@ void get_next_action() {
   Serial.print(frames);
   Serial.println("");
   Serial.print(F("Next action will be at: "));
-  Serial.println(next_action_time);
+  Serial.println(next_action_time);**/
   
 }

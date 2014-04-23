@@ -45,19 +45,18 @@ uint32_t *current_action;
 
 void setup() {
   strip.begin();
-  Serial.begin(9600);
-  Serial.println("Debug");
-  //Serial.print("Number of items is: ");
+  //Serial.begin(9600);
+  //Serial.println("Debug");
 
   // set up all the action stuff.
   sequence_size = sizeof(sequence_table[0]);
   no_actions = sizeof(sequence_table)/sequence_size;
-  //Serial.println(no_actions);
   
   current_action_index = 0;
   next_action_time = sequence_table[0][0]; // set this just to the first one.
   
-  strip.show();
+  strip.show(); // clear the strip
+
 }
 
 void loop() {
