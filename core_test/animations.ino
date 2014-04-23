@@ -49,8 +49,11 @@ void stave_build(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t fram
   }
 }
 
-void stave_unbuild(uint8_t stave_no, uint8_t frames) {
- ; 
+void stave_unbuild(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
+  // unbuilds the stave from fully lit to fully dark, switching the pixels off
+  for (int i=NO_PIXELS_PER_STAVE-1; i >= 0; i--) {
+    pixel_state(stave_no, i, r, g, b, PIXEL_ON, (NO_PIXELS_PER_STAVE-i)*frames+1, PIXEL_OFF, 0); // +1 here is to just eliminate 0 px boundary condition
+  }
 }
 
 void stave_shoot(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t frames, int dir) {
@@ -70,6 +73,13 @@ void fan_build(uint8_t r, uint8_t g, uint8_t b, uint8_t frames, int dir) {
   // builds a fan up from bottom to top with <frames> as the number of frames between each pixel
   for (int stave_no = 0; stave_no < NO_STAVES; stave_no++) {
     stave_build(stave_no, r, g, b, frames, dir);
+  }
+}
+
+void fan_unbuild(uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
+  // unbuilds a fan up from bottom to top assuming fully lit
+  for (int stave_no = 0; stave_no < NO_STAVES; stave_no++) {
+    stave_unbuild(stave_no, r, g, b, frames);
   }
 }
 

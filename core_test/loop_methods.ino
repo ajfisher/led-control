@@ -81,7 +81,7 @@ void get_next_action() {
       stave_build(item, r, g, b, frames, DOWN);
       break;
     case SEQ_STAVE_UNBUILD:
-      ;
+      stave_unbuild(item, r, g, b, frames);
       break;
     case SEQ_STAVE_SHOOT_UP:
       stave_shoot(item, r, g, b, frames, UP);
@@ -94,6 +94,9 @@ void get_next_action() {
       break;
     case SEQ_FAN_BUILD_DOWN:
       fan_build(r, g, b, frames, DOWN);
+      break;
+    case SEQ_FAN_UNBUILD:
+      fan_unbuild(r, g, b, frames);
       break;
     case SEQ_FAN_SHOOT_UP:
       fan_shoot(r, g, b, frames, UP);
