@@ -39,7 +39,8 @@ bool actions_finished = false;
 
 uint8_t sequence_size = 0;
 
-sequence *current_action;
+//sequence *current_action;
+uint32_t *current_action;
 
 // MAIN BITS HERE
 
@@ -47,17 +48,19 @@ void setup() {
   strip.begin();
   Serial.begin(9600);
   Serial.println("Debug");
-  //Serial.print("Number of items is: ");
+  Serial.print("Number of items is: ");
 
   // set up all the action stuff.
-  sequence_size = sizeof(sequence);
+  sequence_size = sizeof(sequence_table[0]);
   no_actions = sizeof(sequence_table)/sequence_size;
-
-  current_action_index = 0;
-  next_action_time = sequence_table[current_action_index].time;
+  Serial.println(no_actions);
   
-  Serial.print("NAT: ");
-  Serial.println(next_action_time);
+  current_action = *sequence_table;
+  
+  //action_initialise();
+  current_action_index = 0;
+  next_action_time = sequence_table[0][0];
+  
   
   strip.show();
   //stave_build(0, 100, 100, 0, 1, DOWN);

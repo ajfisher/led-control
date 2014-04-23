@@ -57,20 +57,18 @@ void get_next_action() {
     Serial.print("current action: ");
     Serial.println(current_action_index);
     current_action_index++;
-    Serial.print("new action: ");
-    Serial.println(current_action_index);
-
-
+   
+    Serial.print("reading words: ");
+    Serial.print(pgm_read_word(&(sequence_table[current_action_index][0])));
+    Serial.print(" ");
+    Serial.print(pgm_read_word(&(sequence_table[current_action_index][1])));
+    Serial.println("");
     
-    // this will work but only get number 2
-    next_action_time = sequence_table[2].time;
-    Serial.print("next action time(2): ");
-    Serial.println(next_action_time);
+    // set the vals;
+//    next_action
 
-    // this will not.    
-    next_action_time = sequence_table[current_action_index].time;
-    Serial.print("next action time (cai); ");
-    Serial.println(next_action_time);
+
+   
     
   } else {
     actions_finished = true;
