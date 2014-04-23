@@ -48,7 +48,10 @@ void setup() {
   // set up all the action stuff.
   sequence_size = sizeof(sequence);
   no_actions = sizeof(sequence_table)/sequence_size;
-  next_action_time = sequence_table[current_action_index].time;
+  //next_action_time = &sequence_table[current_action_index].time;
+
+  current_action = &sequence_table[current_action_index];
+  next_action_time = current_action->time; // this l;ooks like it works...
 
   Serial.println(next_action_time);
 
