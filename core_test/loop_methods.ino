@@ -49,5 +49,31 @@ void calculate_next_frame() {
 }
 
 void get_next_action() {
-  ;
+  // gets the next action that should be undertaken.
+  
+  if (current_action_index < no_actions) {
+    // just make sure we haven't hit the end of the actions.
+    Serial.println("moving to next action");
+    Serial.print("current action: ");
+    Serial.println(current_action_index);
+    current_action_index++;
+    Serial.print("new action: ");
+    Serial.println(current_action_index);
+
+
+    
+    // this will work but only get number 2
+    next_action_time = sequence_table[2].time;
+    Serial.print("next action time(2): ");
+    Serial.println(next_action_time);
+
+    // this will not.    
+    next_action_time = sequence_table[current_action_index].time;
+    Serial.print("next action time (cai); ");
+    Serial.println(next_action_time);
+    
+  } else {
+    actions_finished = true;
+  }
+  
 }

@@ -52,7 +52,7 @@ typedef struct {
 } fan;
 
 typedef struct {
-  uint16_t time;
+  uint32_t time;
   SEQUENCES seq;
   uint8_t item;
   uint8_t r;

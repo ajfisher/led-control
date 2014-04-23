@@ -25,14 +25,17 @@ Notes: Code for sina's fans.
 #include "definitions.h"
 #include "sequencing.h"
 
+
+
 fan thefan;
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NO_LEDS, LEDPIN, NEO_GRB + NEO_KHZ800);
 
 uint32_t last_time = 0;
-uint32_t next_action_time = 0;
+uint32_t next_action_time;
 uint16_t no_actions = 0; 
-uint8_t current_action_index = 0;
+uint8_t current_action_index;
+bool actions_finished = false;
 
 uint8_t sequence_size = 0;
 
@@ -43,18 +46,19 @@ sequence *current_action;
 void setup() {
   strip.begin();
   Serial.begin(9600);
+  Serial.println("Debug");
   //Serial.print("Number of items is: ");
 
   // set up all the action stuff.
   sequence_size = sizeof(sequence);
   no_actions = sizeof(sequence_table)/sequence_size;
-  //next_action_time = &sequence_table[current_action_index].time;
 
-  current_action = &sequence_table[current_action_index];
-  next_action_time = current_action->time; // this l;ooks like it works...
-
+  current_action_index = 0;
+  next_action_time = sequence_table[current_action_index].time;
+  
+  Serial.print("NAT: ");
   Serial.println(next_action_time);
-
+  
   strip.show();
   //stave_build(0, 100, 100, 0, 1, DOWN);
   //stave_build(0, 0, 100, 0, 1, UP);
@@ -67,6 +71,7 @@ void setup() {
 }
 
 void loop() {
+  
   uint16_t cur_time = millis();
   if (cur_time-last_time >= FPS_MS) {
     // we need to update the frame.
@@ -75,7 +80,7 @@ void loop() {
     last_time = cur_time;
   }
 
-  if (cur_time >= next_action_time) {
+  if (cur_time >= next_action_time && !actions_finished) {
     get_next_action();
   }
   
