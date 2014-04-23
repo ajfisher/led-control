@@ -24,6 +24,7 @@ void pixel_off(uint8_t stave_no, uint8_t pixel, uint8_t frames) {
 
 void stave_on(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b) {
   // turn a given stave on.
+  Serial.println("setting stave on");
   for (uint8_t j = 0; j < NO_PIXELS_PER_STAVE; j++) {
       pixel_on(stave_no, j, r, g, b, 10);
   }
@@ -61,6 +62,7 @@ void stave_shoot(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t fram
     }    
   }
 }
+
 
 
 

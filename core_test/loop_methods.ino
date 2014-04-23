@@ -51,27 +51,77 @@ void calculate_next_frame() {
 void get_next_action() {
   // gets the next action that should be undertaken.
   
-  if (current_action_index < no_actions) {
-    // just make sure we haven't hit the end of the actions.
-    Serial.println("moving to next action");
-    Serial.print("current action: ");
-    Serial.println(current_action_index);
-    current_action_index++;
-   
-    Serial.print("reading words: ");
-    Serial.print(pgm_read_word(&(sequence_table[current_action_index][0])));
-    Serial.print(" ");
-    Serial.print(pgm_read_word(&(sequence_table[current_action_index][1])));
-    Serial.println("");
-    
-    // set the vals;
-//    next_action
+  Serial.println(F("\ngetting the next action"));
+  Serial.print(F("current action: "));
+  Serial.println(current_action_index);
+ 
+  Serial.println(F("reading words: "));
+  
+  // set the vals;
+  uint32_t seq_time = pgm_read_word(&(sequence_table[current_action_index][0]));
+  SEQUENCES seq = (SEQUENCES)pgm_read_word(&(sequence_table[current_action_index][1]));
+  uint8_t item = (uint8_t)pgm_read_word(&(sequence_table[current_action_index][2]));
+  uint8_t r = (uint8_t)pgm_read_word(&(sequence_table[current_action_index][3]));
+  uint8_t g = (uint8_t)pgm_read_word(&(sequence_table[current_action_index][4]));
+  uint8_t b = (uint8_t)pgm_read_word(&(sequence_table[current_action_index][5]));
+  uint8_t frames = (uint8_t)pgm_read_word(&(sequence_table[current_action_index][6]));
 
+  Serial.print(F(" seq: "));
+  Serial.println(seq);
 
-   
-    
-  } else {
-    actions_finished = true;
+      //stave_on(item, r, g, b);
+  // now we test the types and set the action based upon it.
+  switch (seq) {
+    case SEQ_STAVE_OFF:
+      stave_off(item);
+      break;
+    case SEQ_STAVE_ON:
+      stave_on(item, r, g, b);
+      break;
+    case SEQ_STAVE_BUILD_UP:
+      stave_build(item, r, g, b, frames, UP);
+      break;
+    case SEQ_STAVE_BUILD_DOWN:
+      stave_build(item, r, g, b, frames, DOWN);
+      break;
+    case SEQ_STAVE_UNBUILD:
+      ;
+      break;
+    case SEQ_STAVE_SHOOT_UP:
+      stave_shoot(item, r, g, b, frames, UP);
+      break;
+    case SEQ_STAVE_SHOOT_DOWN:
+      stave_shoot(item, r, g, b, frames, DOWN);
+      break;
   }
+
+
+  // move to the next action but also check we're in bounds. If so we can update the timer
+  // if not we say we're finished.
+  current_action_index++;
+  if (current_action_index >= no_actions) {
+    actions_finished = true;
+  } else {
+    next_action_time = pgm_read_word(&(sequence_table[current_action_index][0]));
+  }
+  
+  Serial.print(F("Vals: "));
+  Serial.print(F("ST: "));
+  Serial.print(seq_time);
+  Serial.print(F(" seq: "));
+  Serial.print(seq);
+  Serial.print(F(" item: "));
+  Serial.print(item);
+  Serial.print(F(" r: "));
+  Serial.print(r);
+  Serial.print(F(" g: "));
+  Serial.print(g);
+  Serial.print(F(" b: "));
+  Serial.print(b);
+  Serial.print(F(" f: "));
+  Serial.print(frames);
+  Serial.println("");
+  Serial.print(F("Next action will be at: "));
+  Serial.println(next_action_time);
   
 }
