@@ -16,7 +16,7 @@ Notes: Code for sina's fans.
 #define NO_PIXELS_PER_STAVE 17
 #define NO_LEDS (NO_STAVES * NO_PIXELS_PER_STAVE)
 
-#define FPS 15
+#define FPS 17
 #define FPS_MS (1000/FPS)
 
 #define UP 1
