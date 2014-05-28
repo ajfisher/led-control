@@ -4,7 +4,7 @@
 
 // set SINGLESTRIP to true if it's one long strip otherwise to false
 // for a set of strips of equal length.
-#define SINGLE_STRIP false
+#define SINGLE_STRIP true
 
 #if SINGLE_STRIP
   // PIN number if using a single strip
