@@ -1,4 +1,4 @@
-// Holds all of the different animation components
+// Holds all of the different animation forms.
 
 void pixel_state(uint8_t stave_no, uint8_t pixel, uint8_t r, uint8_t g, uint8_t b, \
                 PIXEL_STATUS current, uint8_t c_frames, PIXEL_STATUS next, uint8_t n_frames) {
@@ -37,7 +37,7 @@ void stave_off(uint8_t stave_no) {
 }
 
 void stave_build(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t frames, int dir) {
-  // builds a stave up from bottom to top with <frames> as the number of frames between each item
+  // builds a stave up from fully dark to fully light, one pixel at a time per frame rate in the direction supplied
   if (dir == UP) {
     for (int i=0; i < NO_PIXELS_PER_STAVE; i++) {
       pixel_state(stave_no, i, r, g, b, PIXEL_OFF, i*frames+1, PIXEL_ON, 0); // +1 here is to just eliminate 0 px boundary condition
@@ -49,10 +49,16 @@ void stave_build(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t fram
   }
 }
 
-void stave_unbuild(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
-  // unbuilds the stave from fully lit to fully dark, switching the pixels off
-  for (int i=NO_PIXELS_PER_STAVE-1; i >= 0; i--) {
-    pixel_state(stave_no, i, r, g, b, PIXEL_ON, (NO_PIXELS_PER_STAVE-i)*frames+1, PIXEL_OFF, 0); // +1 here is to just eliminate 0 px boundary condition
+void stave_unbuild(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t frames, int dir) {
+  // unbuilds the stave from fully lit to fully dark, switching the pixels off one at a time in the direction supplied
+  if (dir == DOWN) {
+    for (int i=NO_PIXELS_PER_STAVE-1; i >= 0; i--) {
+      pixel_state(stave_no, i, r, g, b, PIXEL_ON, (NO_PIXELS_PER_STAVE-i)*frames+1, PIXEL_OFF, 0); // +1 here is to just eliminate 0 px boundary condition
+    }    
+  } else {
+    for (int i=NO_PIXELS_PER_STAVE-1; i >= 0; i--) {
+      pixel_state(stave_no, i, r, g, b, PIXEL_ON, i*frames+1, PIXEL_OFF, 0); // +1 here is to just eliminate 0 px boundary condition
+    }
   }
 }
 
@@ -76,10 +82,10 @@ void fan_build(uint8_t r, uint8_t g, uint8_t b, uint8_t frames, int dir) {
   }
 }
 
-void fan_unbuild(uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
+void fan_unbuild(uint8_t r, uint8_t g, uint8_t b, uint8_t frames, int dir) { //TODO
   // unbuilds a fan up from bottom to top assuming fully lit
   for (int stave_no = 0; stave_no < NO_STAVES; stave_no++) {
-    stave_unbuild(stave_no, r, g, b, frames);
+    stave_unbuild(stave_no, r, g, b, frames, dir);
   }
 }
 
@@ -108,3 +114,4 @@ void fan_off() {
   // fades a particular pixel on. assumes the pixel is off if we're doing a fade.
     //pixel_state(stave_no, pixel, r, g, b, PIXEL_FADE_ON, frames, PIXEL_ON, 0);
 }**/
+

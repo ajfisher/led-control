@@ -3,7 +3,6 @@
 
 void update_leds() {
 // does the update of the LEDs
-  //Serial.println("Doing the show of the strip");
   strip.show();
 }
 
@@ -51,12 +50,6 @@ void calculate_next_frame() {
 void get_next_action() {
   // gets the next action that should be undertaken.
   
-/**  Serial.println(F("\ngetting the next action"));
-  Serial.print(F("current action: "));
-  Serial.println(current_action_index);
- 
-  Serial.println(F("reading words: "));**/
-  
   // set the vals;
   uint32_t seq_time = pgm_read_word(&(sequence_table[current_action_index][0]));
   SEQUENCES seq = (SEQUENCES)pgm_read_word(&(sequence_table[current_action_index][1]));
@@ -81,7 +74,14 @@ void get_next_action() {
       stave_build(item, r, g, b, frames, DOWN);
       break;
     case SEQ_STAVE_UNBUILD:
-      stave_unbuild(item, r, g, b, frames);
+      // deprecated
+      stave_unbuild(item, r, g, b, frames, UP);
+      break;
+    case SEQ_STAVE_UNBUILD_UP:
+      stave_unbuild(item, r, g, b, frames, UP);
+      break;
+    case SEQ_STAVE_UNBUILD_DOWN:
+      stave_unbuild(item, r, g, b, frames, DOWN);
       break;
     case SEQ_STAVE_SHOOT_UP:
       stave_shoot(item, r, g, b, frames, UP);
@@ -95,8 +95,11 @@ void get_next_action() {
     case SEQ_FAN_BUILD_DOWN:
       fan_build(r, g, b, frames, DOWN);
       break;
-    case SEQ_FAN_UNBUILD:
-      fan_unbuild(r, g, b, frames);
+    case SEQ_FAN_UNBUILD_UP:
+      fan_unbuild(r, g, b, frames, UP);
+      break;
+    case SEQ_FAN_UNBUILD_DOWN:
+      fan_unbuild(r, g, b, frames, DOWN);
       break;
     case SEQ_FAN_SHOOT_UP:
       fan_shoot(r, g, b, frames, UP);
@@ -141,3 +144,4 @@ void get_next_action() {
   Serial.println(next_action_time);**/
   
 }
+

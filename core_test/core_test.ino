@@ -1,7 +1,7 @@
 /**
 
 Author: Andrew Fisher
-Version: 0.1
+Version: 0.3
 
 Notes: Code for sina's fans.
 
