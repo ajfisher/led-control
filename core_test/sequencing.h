@@ -5,10 +5,11 @@
 uint32_t const sequence_table[][7] PROGMEM =
 {
   //DECO BUILD RED
-
+/**
     {2000, SEQ_FAN_UNBUILD_DOWN, 0, 100, 100, 100, 3},
     {6000, SEQ_FAN_BUILD_UP, 0, 100, 100, 100, 1},
     {8000, SEQ_FAN_UNBUILD_UP, 0, 100, 100, 100, 1},
+    **/
 /**
  // now unbuild it
     {2000, SEQ_STAVE_BUILD_DOWN, 0, 100, 100, 100, 1},
@@ -66,12 +67,12 @@ uint32_t const sequence_table[][7] PROGMEM =
     {7004, SEQ_STAVE_UNBUILD_DOWN, 2, 100, 100, 100, 1},
     {7005, SEQ_STAVE_UNBUILD_DOWN, 4, 100, 100, 100, 1},
     {7006, SEQ_STAVE_UNBUILD_DOWN, 6, 100, 100, 100, 1},
-**/
 
+**/
 
     
 
-/**  
+ 
     {1000, SEQ_STAVE_BUILD_UP, 3, 100, 0, 0, 1},
     {1300, SEQ_STAVE_BUILD_UP, 2, 100, 0, 0, 1},
     {1301, SEQ_STAVE_BUILD_UP, 4, 100, 0, 0, 1},

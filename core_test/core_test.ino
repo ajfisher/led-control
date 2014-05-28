@@ -7,29 +7,19 @@ Notes: Code for sina's fans.
 
 **/
 
-
 #include <Adafruit_NeoPixel.h>
-
-#define LEDPIN 6
-
-#define NO_STAVES 7
-#define NO_PIXELS_PER_STAVE 17
-#define NO_LEDS (NO_STAVES * NO_PIXELS_PER_STAVE)
 
 #define FPS 17
 #define FPS_MS (1000/FPS)
 
 #define UP 1
 #define DOWN -1
+#include "strip_definitions.h"
 
 #include "definitions.h"
 #include "sequencing.h"
 
-
-
 fan thefan;
-
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(NO_LEDS, LEDPIN, NEO_GRB + NEO_KHZ800);
 
 uint32_t last_time = 0;
 uint32_t next_action_time;
@@ -44,10 +34,7 @@ uint32_t *current_action;
 // MAIN BITS HERE
 
 void setup() {
-  strip.begin();
-  //Serial.begin(9600);
-  //Serial.println("Debug");
-
+  stripbegin();
   // set up all the action stuff.
   sequence_size = sizeof(sequence_table[0]);
   no_actions = sizeof(sequence_table)/sequence_size;
@@ -55,7 +42,7 @@ void setup() {
   current_action_index = 0;
   next_action_time = sequence_table[0][0]; // set this just to the first one.
   
-  strip.show(); // clear the strip
+  show(); // clear the strip
 
 }
 

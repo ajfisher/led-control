@@ -3,13 +3,12 @@
 
 void update_leds() {
 // does the update of the LEDs
-  strip.show();
+  show();
 }
 
 void calculate_next_frame() {
 // calculates the requirments of the next frame 
 
-  //Serial.println("calc next frame");
   uint8_t cur_pixel = 0;
   for (uint8_t i = 0; i<NO_STAVES; i++) {
     for (uint8_t j = 0; j < NO_PIXELS_PER_STAVE; j++) {
@@ -17,10 +16,10 @@ void calculate_next_frame() {
       // do calcs here to work out what the next frame should be.
       switch (thefan.staves[i].pixels[j].current_status){
         case PIXEL_OFF:
-          strip.setPixelColor(cur_pixel, 0, 0, 0);
+          setPixelColor(cur_pixel, 0, 0, 0);
           break;
         case PIXEL_ON:
-          strip.setPixelColor(cur_pixel, thefan.staves[i].pixels[j].r, thefan.staves[i].pixels[j].g, thefan.staves[i].pixels[j].b);
+          setPixelColor(cur_pixel, thefan.staves[i].pixels[j].r, thefan.staves[i].pixels[j].g, thefan.staves[i].pixels[j].b);
           break;    
       }
       
@@ -123,25 +122,6 @@ void get_next_action() {
   } else {
     next_action_time = pgm_read_word(&(sequence_table[current_action_index][0]));
   }
-  
-/**  Serial.print(F("Vals: "));
-  Serial.print(F("ST: "));
-  Serial.print(seq_time);
-  Serial.print(F(" seq: "));
-  Serial.print(seq);
-  Serial.print(F(" item: "));
-  Serial.print(item);
-  Serial.print(F(" r: "));
-  Serial.print(r);
-  Serial.print(F(" g: "));
-  Serial.print(g);
-  Serial.print(F(" b: "));
-  Serial.print(b);
-  Serial.print(F(" f: "));
-  Serial.print(frames);
-  Serial.println("");
-  Serial.print(F("Next action will be at: "));
-  Serial.println(next_action_time);**/
   
 }
 

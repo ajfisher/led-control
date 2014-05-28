@@ -1,6 +1,5 @@
 // Holds all of the various definitions for structs etc.
 
-
 enum SEQUENCES {
   SEQ_STAVE_OFF,
   SEQ_STAVE_ON,
