@@ -10,6 +10,10 @@ enum SEQUENCES {
   SEQ_STAVE_UNBUILD_DOWN,
   SEQ_STAVE_SHOOT_UP,
   SEQ_STAVE_SHOOT_DOWN,
+  SEQ_STAVE_FADE_ON,
+  SEQ_STAVE_FADE_OFF,
+  SEQ_STAVE_STREAK_UP,
+  SEQ_STAVE_STREAK_DOWN,
   SEQ_FAN_BUILD_UP,
   SEQ_FAN_BUILD_DOWN,
   SEQ_FAN_UNBUILD,          // deprecated
@@ -17,8 +21,12 @@ enum SEQUENCES {
   SEQ_FAN_UNBUILD_DOWN,
   SEQ_FAN_SHOOT_UP,
   SEQ_FAN_SHOOT_DOWN,
+  SEQ_FAN_STREAK_UP,
+  SEQ_FAN_STREAK_DOWN,
   SEQ_FAN_ON,
-  SEQ_FAN_OFF
+  SEQ_FAN_OFF,
+  SEQ_FAN_FADE_ON,
+  SEQ_FAN_FADE_OFF
 };
 
 enum PIXEL_STATUS {
@@ -47,6 +55,7 @@ typedef struct {
   uint8_t current_frames;
   PIXEL_STATUS next_status;
   uint8_t next_frames;
+  uint8_t interpolate_position;
   
 } fan_pixel;
 

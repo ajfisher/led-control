@@ -10,11 +10,12 @@ void pixel_state(uint8_t stave_no, uint8_t pixel, uint8_t r, uint8_t g, uint8_t 
   thefan.staves[stave_no].pixels[pixel].current_frames = c_frames;
   thefan.staves[stave_no].pixels[pixel].next_status = next;
   thefan.staves[stave_no].pixels[pixel].next_frames = n_frames;
+  thefan.staves[stave_no].pixels[pixel].interpolate_position = 0; // set this to starting point in all cases when we set a state
 }
 
 void pixel_on(uint8_t stave_no, uint8_t pixel, uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
   // turns a particular pixel on
-  pixel_state(stave_no, pixel, r, g, b, PIXEL_ON, frames, PIXEL_NONE, 0); 
+  pixel_state(stave_no, pixel, r, g, b, PIXEL_ON, frames, PIXEL_NONE, 0);
 }
 
 void pixel_off(uint8_t stave_no, uint8_t pixel, uint8_t frames) {
@@ -22,10 +23,20 @@ void pixel_off(uint8_t stave_no, uint8_t pixel, uint8_t frames) {
   pixel_state(stave_no, pixel, 0, 0, 0, PIXEL_OFF, frames, PIXEL_NONE, 0);
 }
 
+void pixel_fade_on(uint8_t stave_no, uint8_t pixel, uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
+  // turns a particular pixel off
+  pixel_state(stave_no, pixel, r, g, b, PIXEL_FADE_ON, frames, PIXEL_NONE, 0);
+}
+
+void pixel_fade_off(uint8_t stave_no, uint8_t pixel, uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
+  // turns a particular pixel off
+  pixel_state(stave_no, pixel, r, g, b, PIXEL_FADE_OFF, frames, PIXEL_NONE, 0);
+}
+
 void stave_on(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b) {
   // turn a given stave on.
   for (uint8_t j = 0; j < NO_PIXELS_PER_STAVE; j++) {
-      pixel_on(stave_no, j, r, g, b, 10);
+      pixel_on(stave_no, j, r, g, b, 1);
   }
 }
 
@@ -34,6 +45,20 @@ void stave_off(uint8_t stave_no) {
   for (uint8_t j = 0; j < NO_PIXELS_PER_STAVE; j++) {
       pixel_off(stave_no, j, 10);
   }
+}
+
+void stave_fade_on(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
+  // fades a stave on.
+  for (uint8_t j = 0; j < NO_PIXELS_PER_STAVE; j++) {
+      pixel_fade_on(stave_no, j, r, g, b, frames);
+  }  
+}
+
+void stave_fade_off(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
+  // fades a stave on.
+  for (uint8_t j = 0; j < NO_PIXELS_PER_STAVE; j++) {
+      pixel_fade_off(stave_no, j, r, g, b, frames);
+  }  
 }
 
 void stave_build(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t frames, int dir) {
@@ -63,7 +88,7 @@ void stave_unbuild(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t fr
 }
 
 void stave_shoot(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t frames, int dir) {
-  // builds a stave up from bottom to top with <frames> as the number of frames between each item
+  // "shoots" a pixel along the course of a stave.
   if (dir == UP) {
     for (int i=0; i < NO_PIXELS_PER_STAVE; i++) {
       pixel_state(stave_no, i, r, g, b, PIXEL_OFF, i*frames+1, PIXEL_ON, frames); 
@@ -71,6 +96,19 @@ void stave_shoot(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t fram
   } else {
     for (int i=NO_PIXELS_PER_STAVE-1; i >= 0; i--) {
       pixel_state(stave_no, i, r, g, b, PIXEL_OFF, (NO_PIXELS_PER_STAVE-i)*frames+1, PIXEL_ON, frames); 
+    }    
+  }
+}
+
+void stave_streak(uint8_t stave_no, uint8_t r, uint8_t g, uint8_t b, uint8_t frames, int dir) {
+  // "shoots" a pixel along the course of a stave.
+  if (dir == UP) {
+    for (int i=0; i < NO_PIXELS_PER_STAVE; i++) {
+      pixel_state(stave_no, i, r, g, b, PIXEL_OFF, i*frames+1, PIXEL_FADE_OFF, frames*NO_PIXELS_PER_STAVE); 
+    }
+  } else {
+    for (int i=NO_PIXELS_PER_STAVE-1; i >= 0; i--) {
+      pixel_state(stave_no, i, r, g, b, PIXEL_OFF, (NO_PIXELS_PER_STAVE-i)*frames+1, PIXEL_FADE_OFF, frames*NO_PIXELS_PER_STAVE); 
     }    
   }
 }
@@ -96,6 +134,13 @@ void fan_shoot(uint8_t r, uint8_t g, uint8_t b, uint8_t frames, int dir) {
   }
 }
 
+void fan_streak(uint8_t r, uint8_t g, uint8_t b, uint8_t frames, int dir) {
+  // shoots a fan up from bottom to top with <frames> as the number of frames between each pixel with a fade away
+  for (int stave_no = 0; stave_no < NO_STAVES; stave_no++) {
+    stave_streak(stave_no, r, g, b, frames, dir);
+  }
+}
+
 void fan_on(uint8_t r, uint8_t g, uint8_t b) {
   // turn a given stave on.
   for (uint8_t j = 0; j < NO_STAVES; j++) {
@@ -110,8 +155,16 @@ void fan_off() {
   }
 }
 
-/**void pixel_fade_on(uint8_t stave_no, uint8_t pixel, uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
-  // fades a particular pixel on. assumes the pixel is off if we're doing a fade.
-    //pixel_state(stave_no, pixel, r, g, b, PIXEL_FADE_ON, frames, PIXEL_ON, 0);
-}**/
+void fan_fade_on(uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
+  // fades the fan on over the number of frames
+  for (int stave_no = 0; stave_no < NO_STAVES; stave_no++) {
+    stave_fade_on(stave_no, r, g, b, frames);
+  }
+}
 
+void fan_fade_off(uint8_t r, uint8_t g, uint8_t b, uint8_t frames) {
+  // fades the fan off over the number of frames
+  for (int stave_no = 0; stave_no < NO_STAVES; stave_no++) {
+    stave_fade_off(stave_no, r, g, b, frames);
+  }
+}
