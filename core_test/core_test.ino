@@ -34,32 +34,30 @@ uint32_t *current_action;
 // MAIN BITS HERE
 
 void setup() {
-  stripbegin();
-  // set up all the action stuff.
-  sequence_size = sizeof(sequence_table[0]);
-  no_actions = sizeof(sequence_table)/sequence_size;
-  
-  current_action_index = 0;
-  next_action_time = sequence_table[0][0]; // set this just to the first one.
-  
-  show(); // clear the strip
+    stripbegin();
+    // set up all the action stuff.
+    sequence_size = sizeof(sequence_table[0]);
+    no_actions = sizeof(sequence_table)/sequence_size;
 
+    current_action_index = 0;
+    next_action_time = sequence_table[0][0]; // set this just to the first one.
+
+    show(); // clear the strip
 }
 
 void loop() {
-  
-  uint16_t cur_time = millis();
-  if (cur_time-last_time >= FPS_MS) {
-    // we need to update the frame.
-    update_leds();
-    calculate_next_frame();
-    last_time = cur_time;
-  }
 
-  if (cur_time >= next_action_time && !actions_finished) {
-    get_next_action();
-  }
-  
+    uint32_t cur_time = millis();
+    if (cur_time-last_time >= FPS_MS) {
+        // we need to update the frame.
+        update_leds();
+        calculate_next_frame();
+        last_time = cur_time;
+    }
+
+    if (cur_time >= next_action_time && !actions_finished) {
+        get_next_action();
+    }
 }
 
 

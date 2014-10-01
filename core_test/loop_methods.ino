@@ -72,7 +72,7 @@ void get_next_action() {
   // gets the next action that should be undertaken.
 
   // set the vals;
-  uint32_t seq_time = pgm_read_word(&(sequence_table[current_action_index][0]));
+  uint32_t seq_time = pgm_read_dword(&(sequence_table[current_action_index][0]));
   SEQUENCES seq = (SEQUENCES)pgm_read_word(&(sequence_table[current_action_index][1]));
   uint8_t item = (uint8_t)pgm_read_word(&(sequence_table[current_action_index][2]));
   uint8_t r = (uint8_t)pgm_read_word(&(sequence_table[current_action_index][3]));
@@ -167,7 +167,7 @@ void get_next_action() {
     actions_finished = true;
   } 
   else {
-    next_action_time = pgm_read_word(&(sequence_table[current_action_index][0]));
+    next_action_time = pgm_read_dword(&(sequence_table[current_action_index][0]));
   }
 
 }
